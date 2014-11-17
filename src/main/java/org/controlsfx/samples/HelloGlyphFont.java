@@ -1,32 +1,5 @@
-/**
- * Copyright (c) 2013, 2014 ControlsFX
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
- *     * Neither the name of ControlsFX, any associated website, nor the
- * names of its contributors may be used to endorse or promote products
- * derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL CONTROLSFX BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 package org.controlsfx.samples;
 
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -43,33 +16,27 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import org.controlsfx.ControlsFXSample;
-import org.controlsfx.control.GridCell;
-import org.controlsfx.control.GridView;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
 import org.controlsfx.glyphfont.GlyphFont;
 import org.controlsfx.glyphfont.GlyphFontRegistry;
 
+//这个程序主要演示如何创建带图标的button
 public class HelloGlyphFont extends ControlsFXSample {
-
     static {
-        // Register a custom default font
+        //所有的图标都定义在这个ttf font文件中，这个文件要丢到src/main/resources文件夹下面
         GlyphFontRegistry.register("icomoon", HelloGlyphFont.class.getResourceAsStream("icomoon.ttf") , 16);
     }
-
 
     private GlyphFont fontAwesome = GlyphFontRegistry.font("FontAwesome");
     private GlyphFont icoMoon = GlyphFontRegistry.font("icomoon");
 
-    //	private static char FAW_TRASH = '\uf014';
+    //这些unicode定义太无聊，我上哪里去找这些图标的unicode值呀------------------------------
     private static char FAW_GEAR  = '\uf013';
-//	private static char FAW_STAR  = '\uf005';
-
     private static char IM_BOLD        = '\ue027';
     private static char IM_UNDERSCORED = '\ue02b';
     private static char IM_ITALIC      = '\ue13e';
-
-
+    //------------------------------------------------------------------------
 
     @Override
     public String getSampleName() {
@@ -84,56 +51,94 @@ public class HelloGlyphFont extends ControlsFXSample {
     @Override
     public Node getPanel(final Stage stage) {
 
-        VBox root = new VBox(10);
-
-        root.setPadding(new Insets(10, 10, 10, 10));
-        root.setMaxHeight(Double.MAX_VALUE);
+        //---创建VBox Container ---------------------------------------------------------
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(10, 10, 10, 10));
+        vbox.setMaxHeight(Double.MAX_VALUE);
+        //-----------------------------------------------------------------------------
+        
+        
+        //---VBox添加label ------------------------------------------------------------------
         Label title = new Label("Using FontAwesome(CDN)");
-        root.getChildren().add(title);
+        vbox.getChildren().add(title);
+        //-----------------------------------------------------------------------------
+        
+        
+        //---VBox添加toolbar, 上面有很多button， 这个程序重点就是展示这些个button  ---------------------------------------------------------------
         ToolBar toolbar = new ToolBar(
-
-                // There are many ways how you can define a Glyph:
-
-                new Button("", new Glyph("FontAwesome", "TRASH_ALT")),              // Use the Glyph-class with a icon name
+                
+                //--这里绝对重点！！！------------------------------------------------------------------------------------------------
+                //创建带图标的按钮方法有很多. 如这里就列出了6种之多。
+                //但是我最推荐第1种.原因是很多图标你不知道它的字符串名字。第1种方法可以直接进入Glyph类使用eclipse的提示功能来获得那个图标的变量
+                new Button("", fontAwesome.create(FontAwesome.Glyph.SMILE_ALT)),    // Use the font-instance with a enum
+                
                 new Button("", new Glyph("FontAwesome", FontAwesome.Glyph.STAR)),   // Use the Glyph-class with a known enum value
+                new Button("", new Glyph("FontAwesome", "TRASH_ALT")),              // Use the Glyph-class with a icon name
                 new Button("", Glyph.create("FontAwesome|BUG")),                    // Use the static Glyph-class create protocol
                 new Button("", fontAwesome.create("REBEL")),                        // Use the font-instance with a name
-                new Button("", fontAwesome.create(FontAwesome.Glyph.SMILE_ALT)),    // Use the font-instance with a enum
                 new Button("", fontAwesome.create(FAW_GEAR).color(Color.RED))       // Use the font-instance with a unicode char
+                //--------------------------------------------------------------------------------------------------------------
+                
         );
-        root.getChildren().add(toolbar);
+        vbox.getChildren().add(toolbar);
+        //---------------------------------------------------------------------------------------------------------------------        
+        
+        
+        //---VBox添加label -----------------------------------------------------------------------------------------------------        
         title = new Label("Using IcoMoon (Local)");
-        root.getChildren().add(title);
+        vbox.getChildren().add(title);
+        //---------------------------------------------------------------------------------------------------------------------
+        
 
-        Glyph effectGlyph = icoMoon.create(IM_UNDERSCORED)
-                .color(Color.BLUE)
-                .size(48)
-                .useHoverEffect();
+        //---VBox添加toolbar, 上面有很多button， 这个程序重点就是展示这些个button  -----------------------------------------------------------
+        Glyph effectGlyph = icoMoon.create(IM_UNDERSCORED) //这里可以设置color / size / 特殊效果等等
+                                    .color(Color.BLUE)
+                                    .size(48)
+                                    .useHoverEffect();
 
         Glyph effectGlyph2 = icoMoon.create(IM_UNDERSCORED)
-                .color(Color.BLUE)
-                .size(48)
-                .useGradientEffect().useHoverEffect();
-
+                                    .color(Color.BLUE)
+                                    .size(48)
+                                    .useGradientEffect()
+                                    .useHoverEffect();
+        
         toolbar = new ToolBar(
-
-                // Since we have a custom font without named characters,
-                // we have to use unicode character codes for the icons:
-
+                // Since we have a custom font without named characters, we have to use unicode character codes for the icons:
                 new Button("", icoMoon.create(IM_BOLD).size(16)),
                 new Button("", icoMoon.create(IM_UNDERSCORED).color(Color.GREEN).size(32)),
                 new Button("", icoMoon.create(IM_ITALIC).size(48)),
                 new Button("", effectGlyph),
                 new Button("", effectGlyph2));
-        root.getChildren().add(toolbar);
+        vbox.getChildren().add(toolbar);
+        //---------------------------------------------------------------------------------------------------------------------               
         
-        GridPane fontDemo = new GridPane();
-        fontDemo.setHgap(5);
-        fontDemo.setVgap(5);
+        
+        //下面这段布局设计也是非常经典的代码--------------------------------------------------------
+        
+        //---定义一个新的gridPane--------------------------------------------
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(5);
+        gridPane.setVgap(5);
+        //---gridPan放在scrollPan里面----------------------------------------
+        ScrollPane scrollPane = new ScrollPane(gridPane);
+        scrollPane.setFitToWidth(true);
+        //---scrollPane放在TabPane的一个tab下面--------------------------------
+        TabPane tabPane = new TabPane();
+        Tab tab = new Tab("FontAwesome Glyph Demo");
+        tab.setContent(scrollPane);
+        tabPane.getTabs().add(tab);       
+        //---tabPane再放在vbox下面--------------------------------------------
+        vbox.getChildren().add(tabPane);
+        VBox.setVgrow(tabPane, Priority.ALWAYS);
+        //-----------------------------------------------------------------
+        
+        //---------------------------------------------------------------------------------
+        
+        
+        //---真正的内容是全都放在最里面的gridPane的--------------------------------------------------
         int maxColumns = 10;
         int col = 0;
         int row = 0;
-        
         for ( FontAwesome.Glyph glyph:  FontAwesome.Glyph.values() ){
         	Color randomColor = new Color( Math.random(), Math.random(), Math.random(), 1);
         	Glyph graphic = Glyph.create( "FontAwesome|" + glyph.name()).sizeFactor(2).color(randomColor).useGradientEffect();
@@ -142,27 +147,14 @@ public class HelloGlyphFont extends ControlsFXSample {
         	button.setMaxWidth(Double.MAX_VALUE);
         	col = col % maxColumns + 1;
         	if ( col == 1 ) row++;
-        	fontDemo.add( button, col, row);
+        	gridPane.add( button, col, row);
         	GridPane.setFillHeight(button, true);
         	GridPane.setFillWidth(button, true);
         }
-        
-        ScrollPane scroller = new ScrollPane(fontDemo);
-        scroller.setFitToWidth(true);
-        
-        TabPane tabs = new TabPane();
-        Tab tab = new Tab("FontAwesome Glyph Demo");
-        tab.setContent(scroller);
-        tabs.getTabs().add(tab);
+        //---------------------------------------------------------------------------------
 
-        
-        root.getChildren().add(tabs);
-        VBox.setVgrow(tabs, Priority.ALWAYS);
-        
-        return root;
-
+        return vbox;
     }
-    
 
     public static void main(String[] args) {
         launch(args);
