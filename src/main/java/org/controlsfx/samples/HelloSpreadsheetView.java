@@ -55,7 +55,7 @@ public class HelloSpreadsheetView extends ControlsFXSample {
 
 
     @Override public Node getPanel(Stage stage) {
-        StackPane centerPane = new StackPane();
+        StackPane stackPane = new StackPane();
         GridBase gridBase = buildGridBase();
         spreadSheetView = new SpreadsheetView(gridBase);
         spreadSheetView.setShowRowHeader(rowHeader.isSelected());
@@ -66,9 +66,9 @@ public class HelloSpreadsheetView extends ControlsFXSample {
         spreadSheetView.getFixedRows().add(0);
         spreadSheetView.getColumns().get(0).setFixed(true);
         spreadSheetView.getColumns().get(1).setPrefWidth(250);
-        centerPane.getChildren().setAll(spreadSheetView);
+        stackPane.getChildren().setAll(spreadSheetView);
         spreadSheetView.getStylesheets().add(getClass().getResource("spreadsheetSample.css").toExternalForm());
-        return centerPane;
+        return stackPane;
     }
     
     //重点代码段 - 创建核心对象 - gridBase
